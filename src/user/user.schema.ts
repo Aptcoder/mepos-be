@@ -5,7 +5,19 @@ import { Store } from 'src/store/store.schema';
 
 export type UserDocument = HydratedDocument<User>;
 
-@Schema()
+export enum UserGender {
+  MALE = 'male',
+  FEMALE = 'female',
+}
+
+export enum RelationshipStatus {
+  SINGLE = 'single',
+  MARRIED = 'married',
+  IN_RELATIONSHIP = 'in_relationship',
+}
+@Schema({
+  autoIndex: true,
+})
 export class User {
   @Prop()
   password: string;
@@ -47,6 +59,29 @@ export class User {
     type: mongoose.Schema.Types.ObjectId,
   })
   role: Role;
+
+  @Prop({
+    default: UserGender.MALE,
+    type: String,
+    enum: UserGender,
+  })
+  gender: UserGender;
+
+  @Prop()
+  dateOfBirth: Date;
+
+  @Prop()
+  ninNumber: string;
+
+  @Prop({
+    default: RelationshipStatus.SINGLE,
+    type: String,
+    enum: RelationshipStatus,
+  })
+  relationshipStatus: RelationshipStatus;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.index({ email: 1, store: 1 }, { unique: true });
+UserSchema.index({ username: 1, store: 1 }, { unique: true });

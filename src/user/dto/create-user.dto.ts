@@ -1,10 +1,13 @@
 import {
+  IsDateString,
   IsEmail,
+  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
   IsUUID,
 } from 'class-validator';
+import { RelationshipStatus, UserGender } from '../user.schema';
 
 export class CreateUserDto {
   @IsEmail()
@@ -30,4 +33,17 @@ export class CreateUserDto {
 
   @IsOptional()
   role: string;
+
+  @IsNotEmpty()
+  @IsEnum(UserGender)
+  gender: UserGender;
+
+  @IsDateString()
+  dateOfBirth: string;
+
+  @IsString()
+  ninNumber: string;
+
+  @IsEnum(RelationshipStatus)
+  relationshipStatus: RelationshipStatus;
 }

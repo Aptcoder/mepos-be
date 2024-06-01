@@ -42,15 +42,30 @@ export class UserService {
 
   async create(storeId: string, createUserDto: CreateUserDto) {
     createUserDto.email = createUserDto.email.toLowerCase();
+    createUserDto.username = createUserDto.username.toLowerCase();
     const foundUser = await this.userModel.findOne({
-      email: createUserDto.email,
-      store: storeId,
+      $or: [
+        {
+          email: createUserDto.email,
+          store: storeId,
+        },
+        {
+          store: storeId,
+          username: createUserDto.username,
+        },
+      ],
     });
 
     if (foundUser) {
-      throw new ConflictException(
-        'User with this email address already exists on store',
-      );
+      if (foundUser.username == createUserDto.username) {
+        throw new ConflictException(
+          'User with this username already exists on store',
+        );
+      } else {
+        throw new ConflictException(
+          'User with this email address already exists on store',
+        );
+      }
     }
 
     createUserDto.password = bcrypt.hashSync(createUserDto.password, 8);

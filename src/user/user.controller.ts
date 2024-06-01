@@ -23,11 +23,12 @@ export class UserController {
   @Permission('user-create')
   @UseGuards(AuthGuard)
   @Post()
-  create(
+  async create(
     @Param('storeId') storeId: string,
     @Body() createUserDto: CreateUserDto,
   ) {
-    return this.userService.create(storeId, createUserDto);
+    const user = await this.userService.create(storeId, createUserDto);
+    return HttpResponseHelper.send('User created', user);
   }
 
   @Get()
