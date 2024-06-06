@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { StoreModule } from './store/store.module';
 import { RoleModule } from './role/role.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { RoleModule } from './role/role.module';
     MongooseModule.forRoot('mongodb://localhost:27018/mpos'),
     StoreModule,
     RoleModule,
+    ProductModule,
   ],
 })
 export class AppModule {}
