@@ -5,7 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Product, ProductSchema } from './schemas/product.schema';
 import { CategoryService } from './category/category.service';
 import { Category, CategorySchema } from './category/category.schema';
-import { UnitService } from './unit/category.service';
+import { UnitService } from './unit/unit.service';
 import { Unit, UnitSchema } from './unit/unit.schema';
 
 @Module({

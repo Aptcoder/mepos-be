@@ -6,23 +6,31 @@ import { Store } from 'src/store/store.schema';
 
 export type ProductDocument = HydratedDocument<Product>;
 
-@Schema()
+@Schema({
+  timestamps: true,
+})
 export class Product {
-  @Prop()
+  @Prop({
+    required: true,
+  })
   name: string;
 
-  @Prop()
+  @Prop({
+    required: true,
+  })
   sku: string;
 
   @Prop({
     ref: 'Unit',
     type: mongoose.Schema.Types.ObjectId,
+    required: true,
   })
   unit: Unit;
 
   @Prop({
     ref: 'Category',
     type: mongoose.Schema.Types.ObjectId,
+    required: true,
   })
   category: Category;
 
@@ -32,7 +40,9 @@ export class Product {
   @Prop()
   alertQuantity: string;
 
-  @Prop()
+  @Prop({
+    required: true,
+  })
   companyName: string;
 
   @Prop()
@@ -44,10 +54,14 @@ export class Product {
   @Prop()
   contactInformation: string;
 
-  @Prop()
+  @Prop({
+    required: true,
+  })
   unitPurchasePrice: string;
 
-  @Prop()
+  @Prop({
+    required: true,
+  })
   sellingPrice: string;
 
   @Prop()

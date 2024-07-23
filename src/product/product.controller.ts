@@ -6,15 +6,24 @@ import {
   Patch,
   Param,
   Delete,
+  UploadedFile,
+  ParseFilePipe,
+  MaxFileSizeValidator,
+  FileTypeValidator,
+  UseInterceptors,
+  Query,
 } from '@nestjs/common';
+import * as csvtojson from 'csvtojson';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { CreateCategoryDto } from './category/dto/create-category.dto';
 import { CategoryService } from './category/category.service';
 import { HttpResponseHelper } from 'src/common/helper/http-response.helper';
-import { UnitService } from './unit/category.service';
+import { UnitService } from './unit/unit.service';
 import { CreateUnitDto } from './unit/dto/create-unit.dto';
+import { Express } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express/multer/interceptors/file.interceptor';
 
 @Controller('/:storeId/products')
 export class ProductController {
@@ -51,10 +60,38 @@ export class ProductController {
     return HttpResponseHelper.send('Product created', product);
   }
 
+  @Post('/upload')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadProductSheet(
+    @Param('storeId') storeId: string,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 1000 }),
+          new FileTypeValidator({ fileType: 'text/csv' }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    const json = await csvtojson().fromString(file.buffer.toString());
+    const products = await this.productService.createBatch(storeId, json);
+    return HttpResponseHelper.send('Products uploaded', products);
+  }
+
   @Get('/categories')
   async fetchCategories(@Param('storeId') storeId: string) {
     const categories = await this.categoryService.findAll(storeId);
     return HttpResponseHelper.send('Categories', categories);
+  }
+
+  @Delete('/categories/:id')
+  async deleteCategory(
+    @Param('storeId') storeId: string,
+    @Param('id') id: string,
+  ) {
+    await this.categoryService.remove(id);
+    return HttpResponseHelper.send('Category deleted', {});
   }
 
   @Get('/units')
@@ -64,8 +101,11 @@ export class ProductController {
   }
 
   @Get()
-  async findAll() {
-    const products = await this.productService.findAll();
+  async findAll(
+    @Param('storeId') storeId: string,
+    @Query('name') name?: string,
+  ) {
+    const products = await this.productService.findAll(storeId, name);
     return HttpResponseHelper.send('Products', products);
   }
 
@@ -80,7 +120,8 @@ export class ProductController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productService.remove(+id);
+  async remove(@Param('id') id: string) {
+    await this.productService.remove(id);
+    return HttpResponseHelper.send('Product deleted', {});
   }
 }
