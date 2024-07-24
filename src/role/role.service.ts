@@ -8,6 +8,42 @@ import { Model } from 'mongoose';
 @Injectable()
 export class RoleService {
   constructor(@InjectModel(Role.name) private roleModel: Model<Role>) {}
+  
+  async onModuleInit() {
+    await this.createDefaultRoles();
+  }
+  async createDefaultRoles() {
+    const defaultRoles = [
+      {
+        name: 'admin',
+        permissions: [
+          'user-create',
+          'user-update',
+          'role-create',
+          'role-update',
+        ],
+        description: 'Administrator with full access',
+      },
+      {
+        name: 'manager',
+        permissions: ['user-create', 'user-update'],
+        description: 'Store manager with user management permissions',
+      },
+      {
+        name: 'cashier',
+        permissions: [],
+        description: 'Basic cashier role',
+      },
+    ];
+
+    for (const role of defaultRoles) {
+      const existingRole = await this.roleModel.findOne({ name: role.name });
+      if (!existingRole) {
+        await this.roleModel.create(role);
+      }
+    }
+  }
+
   async create(createRoleDto: CreateRoleDto) {
     return this.roleModel.create(createRoleDto);
   }

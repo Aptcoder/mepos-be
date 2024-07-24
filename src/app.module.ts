@@ -8,7 +8,7 @@ import { ProductModule } from './product/product.module';
 @Module({
   imports: [
     UserModule,
-    MongooseModule.forRoot('mongodb://localhost:27018/mpos'),
+    MongooseModule.forRoot('mongodb://localhost:27018/mepos'),
     StoreModule,
     RoleModule,
     ProductModule,
