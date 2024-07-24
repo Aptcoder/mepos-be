@@ -21,7 +21,7 @@ export class StoreController {
 
   @Post()
   async create(@Body() createStoreDto: CreateStoreDto) {
-    const data = this.storeService.create(createStoreDto);
+    const data = await this.storeService.create(createStoreDto);
     return HttpResponseHelper.send('Store created', data);
   }
 

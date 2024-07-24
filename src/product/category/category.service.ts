@@ -27,4 +27,10 @@ export class CategoryService {
   findOne(id: number) {
     return `This action returns a #${id} product`;
   }
+
+  remove(id: string) {
+    return this.categoryModel.deleteOne({
+      _id: id,
+    });
+  }
 }

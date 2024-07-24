@@ -32,8 +32,10 @@ export class UserController {
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  async findAll(@Param('storeId') storeId: string) {
+    const users = await this.userService.findAll(storeId);
+    return HttpResponseHelper.send('Users', users);
+    // return this.userService.findAll(storeId);
   }
 
   @Get(':id')

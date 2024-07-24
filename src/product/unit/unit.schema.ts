@@ -4,7 +4,9 @@ import { Store } from 'src/store/store.schema';
 
 export type UnitDocument = HydratedDocument<Unit>;
 
-@Schema()
+@Schema({
+  timestamps: true,
+})
 export class Unit {
   @Prop()
   name: string;

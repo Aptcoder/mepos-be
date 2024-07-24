@@ -4,7 +4,9 @@ import { Store } from 'src/store/store.schema';
 
 export type CategoryDocument = HydratedDocument<Category>;
 
-@Schema()
+@Schema({
+  timestamps: true,
+})
 export class Category {
   @Prop()
   name: string;

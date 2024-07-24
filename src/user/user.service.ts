@@ -21,7 +21,7 @@ export class UserService {
         email: input.email.toLowerCase(),
         store: storeId,
       })
-      .populate('role');
+      .populate('role password');
     if (!user) {
       throw new BadRequestException('Invalid credentials');
     }
@@ -34,9 +34,11 @@ export class UserService {
       id: user.id,
       role: user.role,
     });
+    const userObject = user.toObject();
+    delete userObject.password;
     return {
       token: jwt,
-      user: user,
+      user: userObject,
     };
   }
 
@@ -72,8 +74,12 @@ export class UserService {
     return this.userModel.create({ store: storeId, ...createUserDto });
   }
 
-  findAll() {
-    return this.userModel.find();
+  findAll(storeId?: string) {
+    let query = {};
+    if (storeId) {
+      query['store'] = storeId;
+    }
+    return this.userModel.find(query).populate('role');
   }
 
   findOne(id: number) {

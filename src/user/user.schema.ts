@@ -19,7 +19,9 @@ export enum RelationshipStatus {
   autoIndex: true,
 })
 export class User {
-  @Prop()
+  @Prop({
+    select: false,
+  })
   password: string;
 
   @Prop({
