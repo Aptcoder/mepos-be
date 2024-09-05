@@ -44,6 +44,11 @@ export class Transaction {
   @Prop({
     required: true,
   })
+  invoiceId: Number;
+
+  @Prop({
+    required: true,
+  })
   amount: number;
 
   @Prop({
