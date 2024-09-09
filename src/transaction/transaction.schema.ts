@@ -43,6 +43,7 @@ class TransactionItems {
 export class Transaction {
   @Prop({
     required: true,
+    unique: true
   })
   invoiceId: Number;
 
