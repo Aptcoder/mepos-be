@@ -8,6 +8,7 @@ import { Model } from 'mongoose';
 @Injectable()
 export class RoleService {
   constructor(@InjectModel(Role.name) private roleModel: Model<Role>) {}
+  
   async create(createRoleDto: CreateRoleDto) {
     return this.roleModel.create(createRoleDto);
   }

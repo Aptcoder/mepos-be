@@ -20,6 +20,7 @@ export class TransactionService {
     @InjectModel(Transaction.name) private transactionModel: Model<Transaction>,
     @InjectModel(Product.name) private productModel: Model<Product>,
   ) {}
+
   async create(storeId: string, createTransactionDto: CreateTransactionDto) {
     const transactionItems = await this.populateTransactionItems(
       createTransactionDto.transactionItems,
@@ -28,12 +29,19 @@ export class TransactionService {
     transactionItems.forEach((i) => {
       amount += i.amount;
     });
+    const invoiceId = this.generateInvoiceId();
+        
     return this.transactionModel.create({
+      invoiceId,
       amount,
       store: storeId,
       ...createTransactionDto,
       transactionItems,
     });
+  }
+
+  generateInvoiceId(): number {
+    return Math.floor(10000000 + Math.random() * 90000000);
   }
 
   async populateTransactionItems(transactionItems: TransactionItems[]) {
