@@ -21,7 +21,7 @@ export class UserService {
         email: input.email.toLowerCase(),
         store: storeId,
       })
-      .populate('role password');
+      .populate('role password store');
     if (!user) {
       throw new BadRequestException('Invalid credentials');
     }
