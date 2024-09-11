@@ -18,4 +18,4 @@ export class AccountType {
   bankCode: string;
 }
 
-export const AccountSchema = SchemaFactory.createForClass(Account);
+export const AccountSchema = SchemaFactory.createForClass(AccountType);
