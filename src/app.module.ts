@@ -1,3 +1,4 @@
+import { LoggerModule } from 'nestjs-pino';
 import { UserModule } from './user/user.module';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -8,9 +9,18 @@ import { ProductModule } from './product/product.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
+import { PurchaseModule } from './purchase/purchase.module';
+import { AccountModule } from './account/account.module';
 
 @Module({
   imports: [
+    LoggerModule.forRoot({
+      pinoHttp: {
+        transport: {
+          target: 'pino-pretty',
+        },
+      },
+    }),
     UserModule,
     ConfigModule.forRoot({
       isGlobal: true,
@@ -20,6 +30,8 @@ import { AppController } from './app.controller';
     RoleModule,
     ProductModule,
     TransactionModule,
+    // AccountModule,
+    // PurchaseModule,
   ],
   providers: [AppService],
   controllers: [AppController],

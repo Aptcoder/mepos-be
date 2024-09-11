@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -8,8 +12,15 @@ import { Model } from 'mongoose';
 @Injectable()
 export class RoleService {
   constructor(@InjectModel(Role.name) private roleModel: Model<Role>) {}
-  
+
   async create(createRoleDto: CreateRoleDto) {
+    const name = createRoleDto.name.toLowerCase();
+    const existingRole = this.roleModel.findOne({ name });
+    if (existingRole) {
+      throw new ConflictException(`Role with name ${name} already exists`);
+    }
+
+    // TODO - Check that the permissions sent are valid for us
     return this.roleModel.create(createRoleDto);
   }
 
