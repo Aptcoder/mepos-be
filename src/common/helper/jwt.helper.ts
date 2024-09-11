@@ -15,7 +15,7 @@ export class JwtHelper {
       alg: 'HS256',
       typ: 'JWT',
     };
-    const secret = config.get<string>('jwt_secret');
+    const secret = process.env.JWT_SECRET;
     return sign(payload, secret, { header });
   }
 

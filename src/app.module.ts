@@ -9,7 +9,6 @@ import { ProductModule } from './product/product.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
-
 @Module({
   imports: [
     LoggerModule.forRoot({
