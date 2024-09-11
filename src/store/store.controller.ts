@@ -34,8 +34,9 @@ export class StoreController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.storeService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const store = await this.storeService.findOne(id);
+    return HttpResponseHelper.send('Store', store);
   }
 
   @Patch(':id')
