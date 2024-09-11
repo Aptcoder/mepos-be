@@ -5,10 +5,9 @@ import * as config from 'config';
 export class JwtHelper {
   static async signToken(user: { id: string; role: {} }) {
     const payload = {
-      iss: 'http://localhost:3000',
       sub: user.id,
       iat: Math.floor(Date.now() / 1000),
-      exp: Math.floor(Date.now() / 1000) + 18000,
+      exp: Math.floor(Date.now() / 1000) + 1800000,
       role: user.role,
     };
 
@@ -16,8 +15,8 @@ export class JwtHelper {
       alg: 'HS256',
       typ: 'JWT',
     };
-    // const secret = config.get<string>('jwt_secret');
-    return sign(payload, 'secret', { header });
+    const secret = config.get<string>('jwt_secret');
+    return sign(payload, secret, { header });
   }
 
   // static async refreshJWT(user: User) {

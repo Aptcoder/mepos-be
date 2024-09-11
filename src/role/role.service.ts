@@ -15,7 +15,7 @@ export class RoleService {
 
   async create(createRoleDto: CreateRoleDto) {
     const name = createRoleDto.name.toLowerCase();
-    const existingRole = this.roleModel.findOne({ name });
+    const existingRole = await this.roleModel.findOne({ name });
     if (existingRole) {
       throw new ConflictException(`Role with name ${name} already exists`);
     }
