@@ -9,8 +9,11 @@ import { ProductModule } from './product/product.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
+import { MailModule } from './mail/mail.module';
+
 @Module({
   imports: [
+    MailModule,
     LoggerModule.forRoot({
       pinoHttp: {
         transport: {
