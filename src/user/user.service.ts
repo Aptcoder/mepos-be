@@ -97,10 +97,13 @@ export class UserService {
   }
 
   async forgotPassword(email: string, storeId: string) {
-    const user = await this.findByEmail(email);
-    if (!user) {
-      throw new NotFoundException('Invalid Email');
-    }
+    const user = await this.userModel
+    .findOne({
+      email: email.toLowerCase(),
+      store: storeId,
+    });
+    
+    if (!user) throw new BadRequestException('Invalid credentials');
     
     await this.mailService.sendPasswordResetMail(user, storeId);
 
