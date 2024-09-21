@@ -64,12 +64,12 @@ export class UserController {
   }
 
   @Post('forgot-password')
-  async ForgotPassword(@Body() body: ResetPasswordDto): Promise<{ data: any, status: number, message: string }>  {
-    return await this.userService.forgotPassword(body.email);
+  async ForgotPassword(@Body() body: ResetPasswordDto, @Param('storeId') storeId: string): Promise<{ data: any, status: number, message: string }>  {
+    return await this.userService.forgotPassword(body.email, storeId);
   }
 
   @Post('reset-password')
-  async ResetPassword(@Body() signUpAndInDto: ResetPasswordDto): Promise<{ data: any, status: number, message: string }>  {
-    return await this.userService.resetPassword(signUpAndInDto);
+  async ResetPassword(@Body() resetPasswordDto: ResetPasswordDto, @Param('storeId') storeId: string): Promise<{ data: any, status: number, message: string }>  {
+    return await this.userService.resetPassword(resetPasswordDto, storeId);
   }
 }

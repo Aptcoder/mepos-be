@@ -12,7 +12,7 @@ export class MailService {
     private readonly mailerService: MailerService,
   ) {}
 
-  async sendPasswordResetMail(user: User) {
+  async sendPasswordResetMail(user: User, storeId: string) {
     const passwordToken = crypto.randomBytes(40).toString('hex');
 
     const pUser = await this.userService.findByEmail(user.email);
@@ -23,7 +23,7 @@ export class MailService {
     await this.userService.update(pUser.id, {passwordToken, passwordTokenExpirationDate});
 
     const origin = process.env.SITE_BASE_URL;
-    const resetPassword = `${origin}/reset-password?passwordToken=${passwordToken}&email=${user.email}`;
+    const resetPassword = `${origin}/reset-password?passwordToken=${passwordToken}&email=${user.email}&storeId=${storeId}`;
     const message = `<p>Please reset your password by clicking this link: <a href="${resetPassword}">Reset Password</a></p>`;
     
     await this.mailerService.sendMail({

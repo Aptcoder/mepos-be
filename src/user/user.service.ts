@@ -96,24 +96,27 @@ export class UserService {
     return await this.userModel.findOne({email})
   }
 
-  async forgotPassword(email: string) {
+  async forgotPassword(email: string, storeId: string) {
     const user = await this.findByEmail(email);
     if (!user) {
       throw new NotFoundException('Invalid Email');
     }
-    console.log(user);
     
-    await this.mailService.sendPasswordResetMail(user);
+    await this.mailService.sendPasswordResetMail(user, storeId);
 
     return { data: [], status: HttpStatus.OK, message: 'Please check your email for the Password Reset link' };
   }
 
+  async resetPassword(resetPassword: ResetPasswordDto, storeId: string) {
+    const {email, passwordToken, password} = resetPassword;    
 
-  async resetPassword(resetPassword: ResetPasswordDto) {
-    const {email, passwordToken, password} = resetPassword;
-    const user = await this.findByEmail(email);
+    const user = await this.userModel
+    .findOne({
+      email: email.toLowerCase(),
+      store: storeId,
+    });
     
-    if (!user) throw new NotFoundException('User does not exist!');
+    if (!user) throw new BadRequestException('Invalid credentials');
 
     const currentDay = new Date();
     if (user.passwordToken === passwordToken && user.passwordTokenExpirationDate > currentDay) {
