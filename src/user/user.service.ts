@@ -16,7 +16,7 @@ import { User } from './user.schema';
 import { Model } from 'mongoose';
 import { LoginUserDto } from './dto/login-user.dto';
 import { JwtHelper } from 'src/common/helper/jwt.helper';
-import { ResetPasswordrDto } from './dto/reset-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
@@ -101,14 +101,15 @@ export class UserService {
     if (!user) {
       throw new NotFoundException('Invalid Email');
     }
-
+    console.log(user);
+    
     await this.mailService.sendPasswordResetMail(user);
 
     return { data: [], status: HttpStatus.OK, message: 'Please check your email for the Password Reset link' };
   }
 
 
-  async resetPassword(resetPassword: ResetPasswordrDto) {
+  async resetPassword(resetPassword: ResetPasswordDto) {
     const {email, passwordToken, password} = resetPassword;
     const user = await this.findByEmail(email);
     
@@ -126,10 +127,6 @@ export class UserService {
     await this.update(user.id, user)
     
     return { data: [], status: HttpStatus.OK, message: 'Password reset is successful!' };
-  }
-
-  generateCode(): number {
-    return Math.floor(100000 + Math.random() * 900000)
   }
 
   findOne(id: number) {

@@ -15,7 +15,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { HttpResponseHelper } from 'src/common/helper/http-response.helper';
 import { AuthGuard } from 'src/common/guards/auth.guard';
 import { Permission } from 'src/common/guards/permission.helper';
-import { ResetPasswordrDto } from './dto/reset-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Controller('/:storeId/users')
 export class UserController {
@@ -64,12 +64,12 @@ export class UserController {
   }
 
   @Post('forgot-password')
-  async ForgotPassword(@Body() body: ResetPasswordrDto): Promise<{ data: any, status: number, message: string }>  {
+  async ForgotPassword(@Body() body: ResetPasswordDto): Promise<{ data: any, status: number, message: string }>  {
     return await this.userService.forgotPassword(body.email);
   }
 
   @Post('reset-password')
-  async ResetPassword(@Body() signUpAndInDto: ResetPasswordrDto): Promise<{ data: any, status: number, message: string }>  {
+  async ResetPassword(@Body() signUpAndInDto: ResetPasswordDto): Promise<{ data: any, status: number, message: string }>  {
     return await this.userService.resetPassword(signUpAndInDto);
   }
 }

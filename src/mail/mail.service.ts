@@ -17,12 +17,13 @@ export class MailService {
 
     const pUser = await this.userService.findByEmail(user.email);
     if (!pUser) throw new NotFoundException('User does not exist!');
+    
     const tenMinutes = 1000 * 60 * 10;
     const passwordTokenExpirationDate = new Date(Date.now() + tenMinutes);
     await this.userService.update(pUser.id, {passwordToken, passwordTokenExpirationDate});
 
     const origin = process.env.SITE_BASE_URL;
-    const resetPassword = `${origin}?passwordToken=${passwordToken}&email=${user.email}`;
+    const resetPassword = `${origin}/reset-password?passwordToken=${passwordToken}&email=${user.email}`;
     const message = `<p>Please reset your password by clicking this link: <a href="${resetPassword}">Reset Password</a></p>`;
     
     await this.mailerService.sendMail({
@@ -32,7 +33,7 @@ export class MailService {
       template: './passwordreset',
       context: {
         name: user.firstName || 'User',
-        code: message,
+        message,
       },
     });
   }

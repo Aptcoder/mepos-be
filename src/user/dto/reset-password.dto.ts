@@ -1,12 +1,14 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsNotEmpty, ValidateIf } from 'class-validator';
 
-export class ResetPasswordrDto {
+export class ResetPasswordDto {
   @IsEmail()
   email: string;
 
-  @IsNotEmpty()
-  passwordToken: string;
+  @ValidateIf((object, value) => value !== undefined)
+  @IsNotEmpty({ message: 'Please Enter password token' })
+  passwordToken?: string;
 
-  @IsNotEmpty()
-  password: string;
+  @ValidateIf((object, value) => value !== undefined)
+  @IsNotEmpty({ message: 'Please Enter your password' })
+  password?: string;
 }

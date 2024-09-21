@@ -3,7 +3,6 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { Module, Global, forwardRef } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { join } from 'path';
-import { UserModule } from 'src/user/user.module';
 import { UserService } from 'src/user/user.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User,UserSchema } from 'src/user/user.schema';
@@ -24,7 +23,7 @@ import { User,UserSchema } from 'src/user/user.schema';
           },
         },
         defaults: {
-          from: '"No Reply" <noreply@example.com>',
+          from: '"No Reply" <noreply@mepos.com>',
         },
         template: {
           dir: join(__dirname, 'templates'),
@@ -36,7 +35,7 @@ import { User,UserSchema } from 'src/user/user.schema';
       }),
     }),
   ],
-  providers: [MailService, UserService],
+  providers: [MailService],
   exports: [MailService],
 })
 export class MailModule {}
