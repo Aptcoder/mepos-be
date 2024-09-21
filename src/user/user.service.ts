@@ -104,7 +104,7 @@ export class UserService {
     });
     
     if (!user) throw new BadRequestException('Invalid credentials');
-    
+
     await this.mailService.sendPasswordResetMail(user, storeId);
 
     return { data: [], status: HttpStatus.OK, message: 'Please check your email for the Password Reset link' };
@@ -122,7 +122,7 @@ export class UserService {
     if (!user) throw new BadRequestException('Invalid credentials');
 
     const currentDay = new Date();
-    if (user.passwordToken === passwordToken && user.passwordTokenExpirationDate > currentDay) {
+    if (user.passwordToken !== passwordToken && user.passwordTokenExpirationDate > currentDay) {
       throw new UnauthorizedException('Invalid Password Token');
     }
 
