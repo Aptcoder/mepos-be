@@ -73,7 +73,7 @@ export class UserController {
   @Post('reset-password')
   async ResetPassword(@Body() resetPasswordDto: ResetPasswordDto, @Param('storeId') storeId: string)  {
     const data = await this.userService.resetPassword(resetPasswordDto, storeId);
-    return HttpResponseHelper.send('Please check your email for the Password Reset link', data);
+    return HttpResponseHelper.send('Password reset is successful!', data);
 
   }
 }
