@@ -28,8 +28,9 @@ export class CategoryService {
     return `This action returns a #${id} product`;
   }
 
-  remove(id: string) {
+  remove(storeId: string, id: string) {
     return this.categoryModel.deleteOne({
+      store: storeId,
       _id: id,
     });
   }

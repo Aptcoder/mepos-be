@@ -25,4 +25,11 @@ export class UnitService {
   findOne(id: number) {
     return `This action returns a #${id} product`;
   }
+
+  remove(storeId: string, id: string) {
+    return this.unitModel.deleteOne({
+      store: storeId,
+      _id: id,
+    });
+  }
 }

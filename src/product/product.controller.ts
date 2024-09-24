@@ -90,8 +90,17 @@ export class ProductController {
     @Param('storeId') storeId: string,
     @Param('id') id: string,
   ) {
-    await this.categoryService.remove(id);
+    await this.categoryService.remove(storeId, id);
     return HttpResponseHelper.send('Category deleted', {});
+  }
+
+  @Delete('/units/:id')
+  async deleteUnit(
+    @Param('storeId') storeId: string,
+    @Param('id') id: string,
+  ) {
+    await this.unitService.remove(storeId, id);
+    return HttpResponseHelper.send('Unit deleted', {});
   }
 
   @Get('/units')
