@@ -106,8 +106,7 @@ export class UserService {
     if (!user) throw new BadRequestException('Invalid credentials');
 
     await this.mailService.sendPasswordResetMail(user, storeId);
-
-    return { data: [], status: HttpStatus.OK, message: 'Please check your email for the Password Reset link' };
+    return [];
   }
 
   async resetPassword(resetPassword: ResetPasswordDto, storeId: string) {
@@ -132,7 +131,7 @@ export class UserService {
     user.passwordTokenExpirationDate = null;
     await this.update(user.id, user)
     
-    return { data: [], status: HttpStatus.OK, message: 'Password reset is successful!' };
+    return [];
   }
 
   findOne(id: number) {
