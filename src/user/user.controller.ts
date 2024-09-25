@@ -15,6 +15,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { HttpResponseHelper } from 'src/common/helper/http-response.helper';
 import { AuthGuard } from 'src/common/guards/auth.guard';
 import { Permission } from 'src/common/guards/permission.helper';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Controller('/:storeId/users')
 export class UserController {
@@ -60,5 +61,19 @@ export class UserController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.remove(+id);
+  }
+
+  @Post('forgot-password')
+  async ForgotPassword(@Body() body: ResetPasswordDto, @Param('storeId') storeId: string)  {
+    const data = await this.userService.forgotPassword(body.email, storeId);
+    return HttpResponseHelper.send('Please check your email for the Password Reset link', data);
+
+  }
+
+  @Post('reset-password')
+  async ResetPassword(@Body() resetPasswordDto: ResetPasswordDto, @Param('storeId') storeId: string)  {
+    const data = await this.userService.resetPassword(resetPasswordDto, storeId);
+    return HttpResponseHelper.send('Password reset is successful!', data);
+
   }
 }

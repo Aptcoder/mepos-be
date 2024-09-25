@@ -62,6 +62,15 @@ export class User {
   })
   role: Role;
 
+  @Prop()
+  code: number;
+
+  @Prop()
+  passwordToken: string;
+
+  @Prop()
+  passwordTokenExpirationDate: Date;
+
   @Prop({
     default: UserGender.MALE,
     type: String,
