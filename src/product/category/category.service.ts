@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Category } from './category.schema';
 import { CreateCategoryDto } from './dto/create-category.dto';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
 export class CategoryService {
@@ -24,13 +25,22 @@ export class CategoryService {
     return this.categoryModel.find(query);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(storeId: string, id: string) {
+    const category = await this.categoryModel.findOne({store: storeId, _id: id});
+    if (!category) throw new NotFoundException('Category does not exist');
+    return category
   }
 
-  remove(id: string) {
+  remove(storeId: string, id: string) {
     return this.categoryModel.deleteOne({
+      store: storeId,
       _id: id,
     });
+  }
+
+  async update(storeId: string, id: string, updateCategory: UpdateCategoryDto) {
+    const category = await this.categoryModel.findOneAndUpdate({store: storeId, _id: id}, {...updateCategory});
+    if (!category) throw new NotFoundException('Category does not exist');
+    return category
   }
 }
