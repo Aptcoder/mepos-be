@@ -24,6 +24,7 @@ import { UnitService } from './unit/unit.service';
 import { CreateUnitDto } from './unit/dto/create-unit.dto';
 import { Express } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express/multer/interceptors/file.interceptor';
+import { UpdateUnitDto } from './unit/dto/update-unit.dto';
 
 @Controller('/:storeId/products')
 export class ProductController {
@@ -48,7 +49,7 @@ export class ProductController {
     @Param('id') id: string,
   ) {
     const category = await this.categoryService.findOne(storeId, id)
-    return HttpResponseHelper.send('Category', {category});
+    return HttpResponseHelper.send('Category', category);
   }
 
   @Delete('/categories/:id')
@@ -67,7 +68,7 @@ export class ProductController {
     @Body() body: CreateCategoryDto
   ) {
     const category = await this.categoryService.update(storeId, id, body)
-    return HttpResponseHelper.send('Category updated', {category});
+    return HttpResponseHelper.send('Category updated', category);
   }
 
   @Get('/categories')
@@ -83,6 +84,40 @@ export class ProductController {
   ) {
     const unit = await this.unitService.create(storeId, createUnitDto);
     return HttpResponseHelper.send('Unit created', unit);
+  }
+
+  @Get('/units/:id')
+  async fetchUnit(
+    @Param('storeId') storeId: string,
+    @Param('id') id: string,
+  ) {
+    const unit = await this.unitService.findOne(storeId, id);
+    return HttpResponseHelper.send('Unit fetched', unit);
+  }
+
+  @Get('/units')
+  async fetchUnits(@Param('storeId') storeId: string) {
+    const units = await this.unitService.findAll(storeId);
+    return HttpResponseHelper.send('Units', units);
+  }
+  
+  @Patch('/units/:id')
+  async updateUnit(
+    @Param('storeId') storeId: string,
+    @Param('id') id: string,
+    @Body() updateUnitDto: UpdateUnitDto
+  ) {
+    const unit = await this.unitService.update(storeId, id, updateUnitDto);
+    return HttpResponseHelper.send('Unit updated', unit);
+  }
+
+  @Delete('/units/:id')
+  async deleteUnit(
+    @Param('storeId') storeId: string,
+    @Param('id') id: string,
+  ) {
+    await this.unitService.remove(storeId, id);
+    return HttpResponseHelper.send('Unit deleted', {});
   }
 
   @Post()
@@ -111,23 +146,6 @@ export class ProductController {
     const json = await csvtojson().fromString(file.buffer.toString());
     const products = await this.productService.createBatch(storeId, json);
     return HttpResponseHelper.send('Products uploaded', products);
-  }
-
-
-
-  @Delete('/units/:id')
-  async deleteUnit(
-    @Param('storeId') storeId: string,
-    @Param('id') id: string,
-  ) {
-    await this.unitService.remove(storeId, id);
-    return HttpResponseHelper.send('Unit deleted', {});
-  }
-
-  @Get('/units')
-  async fetchUnits(@Param('storeId') storeId: string) {
-    const units = await this.unitService.findAll(storeId);
-    return HttpResponseHelper.send('Units', units);
   }
 
   @Get()
