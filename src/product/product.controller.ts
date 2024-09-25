@@ -42,6 +42,40 @@ export class ProductController {
     return HttpResponseHelper.send('Category created', category);
   }
 
+  @Get('/categories/:id')
+  async fetchCategory(
+    @Param('storeId') storeId: string,
+    @Param('id') id: string,
+  ) {
+    const category = await this.categoryService.findOne(storeId, id)
+    return HttpResponseHelper.send('Category', {category});
+  }
+
+  @Delete('/categories/:id')
+  async deleteCategory(
+    @Param('storeId') storeId: string,
+    @Param('id') id: string,
+  ) {
+    await this.categoryService.remove(storeId, id);
+    return HttpResponseHelper.send('Category deleted', {});
+  }
+
+  @Patch('/categories/:id')
+  async updateCategory(
+    @Param('storeId') storeId: string,
+    @Param('id') id: string,
+    @Body() body: CreateCategoryDto
+  ) {
+    const category = await this.categoryService.update(storeId, id, body)
+    return HttpResponseHelper.send('Category updated', {category});
+  }
+
+  @Get('/categories')
+  async fetchCategories(@Param('storeId') storeId: string) {
+    const categories = await this.categoryService.findAll(storeId);
+    return HttpResponseHelper.send('Categories', categories);
+  }
+
   @Post('/units')
   async createUnit(
     @Param('storeId') storeId: string,
@@ -79,20 +113,7 @@ export class ProductController {
     return HttpResponseHelper.send('Products uploaded', products);
   }
 
-  @Get('/categories')
-  async fetchCategories(@Param('storeId') storeId: string) {
-    const categories = await this.categoryService.findAll(storeId);
-    return HttpResponseHelper.send('Categories', categories);
-  }
 
-  @Delete('/categories/:id')
-  async deleteCategory(
-    @Param('storeId') storeId: string,
-    @Param('id') id: string,
-  ) {
-    await this.categoryService.remove(storeId, id);
-    return HttpResponseHelper.send('Category deleted', {});
-  }
 
   @Delete('/units/:id')
   async deleteUnit(
