@@ -25,6 +25,7 @@ import { CreateUnitDto } from './unit/dto/create-unit.dto';
 import { Express } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express/multer/interceptors/file.interceptor';
 import { UpdateUnitDto } from './unit/dto/update-unit.dto';
+import { UpdateCategoryDto } from './category/dto/update-category.dto';
 
 @Controller('/:storeId/products')
 export class ProductController {
@@ -65,9 +66,9 @@ export class ProductController {
   async updateCategory(
     @Param('storeId') storeId: string,
     @Param('id') id: string,
-    @Body() body: CreateCategoryDto
+    @Body() updateCategoryDto: UpdateCategoryDto
   ) {
-    const category = await this.categoryService.update(storeId, id, body)
+    const category = await this.categoryService.update(storeId, id, updateCategoryDto)
     return HttpResponseHelper.send('Category updated', category);
   }
 
