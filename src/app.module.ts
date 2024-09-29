@@ -10,6 +10,7 @@ import { TransactionModule } from './transaction/transaction.module';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { MailModule } from './mail/mail.module';
+import { CustomersModule } from './customers/customers.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { MailModule } from './mail/mail.module';
     RoleModule,
     ProductModule,
     TransactionModule,
+    CustomersModule,
     // AccountModule,
     // PurchaseModule,
   ],
