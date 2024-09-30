@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsEmail, IsEnum } from "class-validator";
+import { IsNotEmpty, IsEmail, IsEnum, ValidateIf } from "class-validator";
 import { UserGender } from "src/user/user.schema";
 
 export class CreateCustomerDto {
@@ -21,6 +21,7 @@ export class CreateCustomerDto {
     @IsNotEmpty()
     membershipStatus: string;    
 
+    @ValidateIf((object, value) => value !== undefined)
     @IsNotEmpty()
-    customersID: string;
+    customersID?: string;
 }

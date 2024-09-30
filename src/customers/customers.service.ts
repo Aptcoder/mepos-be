@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { StoreService } from 'src/store/store.service';
@@ -13,23 +13,39 @@ export class CustomersService {
     private readonly storeService: StoreService
   ){}
   
-  create(createCustomerDto: CreateCustomerDto) {
-    return 'This action adds a new customer';
+  async create(createCustomerDto: CreateCustomerDto, storeId: string) {
+    const store = await this.storeService.findOne(storeId);
+    if (!store) throw new NotFoundException('Invalid Store!');
+
+    const customersID = this.generateCustomersId();
+
+    const customer = await this.customerModel.create({...createCustomerDto, store: storeId, customersID})
+    return customer;
   }
 
-  findAll() {
-    return `This action returns all customers`;
+  async findAll(storeId: string) {
+    const customers = await this.customerModel.find({store: storeId})
+    return customers;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} customer`;
+  async findOne(id: string) {
+    const customer = await this.customerModel.findById(id);
+    if (!customer) throw new NotFoundException('Customer not found!');
+    return customer;
   }
 
-  update(id: number, updateCustomerDto: UpdateCustomerDto) {
-    return `This action updates a #${id} customer`;
+  async update(id: string, updateCustomerDto: UpdateCustomerDto) {
+    const customer = await this.customerModel.findByIdAndUpdate(id, {...updateCustomerDto}, {runValidators: true, new: true})
+    if (!customer) throw new NotFoundException('Customer not found!');
+    return customer ;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} customer`;
+  async remove(id: string) {
+    await this.customerModel.deleteOne({_id: id});
+    return;
+  }
+
+  generateCustomersId(): number {
+    return Math.floor(10000000 + Math.random() * 90000000);
   }
 }

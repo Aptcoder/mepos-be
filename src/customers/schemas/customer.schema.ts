@@ -9,29 +9,43 @@ export type CustomerDocument = HydratedDocument<Customer>;
     timestamps: true,
 })
 export class Customer {
-    @Prop({})
+    @Prop({
+        required: true,
+    })
     firstName: string;
 
-    @Prop({})
+    @Prop({
+        required: true,
+    })
     lastName: string;
 
-    @Prop({})
+    @Prop({
+        required: true,
+    })
     email: string;
 
-    @Prop({})
+    @Prop({
+        required: true,
+    })
     phoneNumber: string;
 
     @Prop({
+        required: true,
         type: String,
         enum: UserGender
     })
     gender: string;
 
-    @Prop({})
+    @Prop({
+        required: true,
+    })
     membershipStatus: string;    
 
-    @Prop({})
-    customersID: string;
+    @Prop({
+        required: true,
+        unique: true
+    })
+    customersID: number;
     
     @Prop({
         required: true,
