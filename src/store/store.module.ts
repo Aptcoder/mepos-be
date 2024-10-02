@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Global } from '@nestjs/common';
 import { StoreService } from './store.service';
 import { StoreController } from './store.controller';
 import { UserModule } from 'src/user/user.module';
@@ -19,5 +19,6 @@ import { User, UserSchema } from 'src/user/user.schema';
   ],
   controllers: [StoreController],
   providers: [StoreService, UserService],
+  exports: [StoreService]
 })
 export class StoreModule {}
