@@ -45,7 +45,7 @@ export class Customer {
         required: true,
         unique: true
     })
-    customersID: number;
+    customerId: number;
     
     @Prop({
         required: true,

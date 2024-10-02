@@ -17,9 +17,9 @@ export class CustomersService {
     const store = await this.storeService.findOne(storeId);
     if (!store) throw new NotFoundException('Invalid Store!');
 
-    const customersID = this.generateCustomersId();
+    const customerId = this.generateCustomersId();
 
-    const customer = await this.customerModel.create({...createCustomerDto, store: storeId, customersID})
+    const customer = await this.customerModel.create({...createCustomerDto, store: storeId, customerId})
     return customer;
   }
 
