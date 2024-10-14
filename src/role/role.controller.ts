@@ -40,7 +40,8 @@ export class RoleController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.roleService.remove(+id);
+  async remove(@Param('id') id: string) {
+    await this.roleService.remove(id);
+    return HttpResponseHelper.send('Role deleted', {});
   }
 }
