@@ -19,9 +19,10 @@ export class PurchaseService {
     const store = await this.storeService.findOne(storeId);
     if (!store) throw new NotFoundException('Invalid Store!');
 
-    const product = await this.productService.createBatch(storeId, productFileJSON);
+    const products = await this.productService.createBatch(storeId, productFileJSON);
+    const productIds = products.filter((product) => product._id);
 
-    const purchase =  await this.purchaseModel.create({ store: storeId, product: product[0]._id, ...createPurchaseDto });
+    const purchase =  await this.purchaseModel.create({ store: storeId, product: productIds, ...createPurchaseDto });
     
     return purchase;
   }

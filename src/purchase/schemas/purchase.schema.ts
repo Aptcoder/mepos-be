@@ -31,9 +31,9 @@ export class Purchase {
   @Prop({
     required: true,
     ref: 'Product',
-    type: mongoose.Schema.Types.ObjectId,
+    type: [mongoose.Schema.Types.ObjectId],
   })
-  product: Product;
+  product: Product[];
 
   @Prop({
     required: true,
