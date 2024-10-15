@@ -23,5 +23,5 @@ export class CreateCustomerDto {
 
     @ValidateIf((object, value) => value !== undefined)
     @IsNotEmpty()
-    customersID?: string;
+    customerId?: string;
 }

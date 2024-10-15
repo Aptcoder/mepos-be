@@ -8,6 +8,7 @@ import { UserService } from 'src/user/user.service';
 import { RoleModule } from 'src/role/role.module';
 import { User, UserSchema } from 'src/user/user.schema';
 
+@Global()
 @Module({
   imports: [
     UserModule,
