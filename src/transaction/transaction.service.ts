@@ -30,7 +30,6 @@ export class TransactionService {
       amount += i.amount;
     });
     const invoiceId = this.generateInvoiceId();
-        
     return this.transactionModel.create({
       invoiceId,
       amount,

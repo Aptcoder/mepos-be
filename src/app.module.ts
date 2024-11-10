@@ -9,8 +9,19 @@ import { ProductModule } from './product/product.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
+import { I18nModule, QueryResolver } from 'nestjs-i18n';
+import * as path from 'path';
 @Module({
   imports: [
+    I18nModule.forRoot({
+      fallbackLanguage: 'en',
+      loaderOptions: {
+        path: path.join(__dirname, '/translation/locales/'),
+        watch: true,
+      },
+      viewEngine: 'hbs',
+      resolvers: [{ use: QueryResolver, options: ['lang'] }],
+    }),
     LoggerModule.forRoot({
       pinoHttp: {
         transport: {
