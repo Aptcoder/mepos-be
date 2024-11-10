@@ -47,7 +47,7 @@ export class RoleService {
     return role.save();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} role`;
+  async remove(id: string) {
+    await this.roleModel.findByIdAndDelete(id);
   }
 }
