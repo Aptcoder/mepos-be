@@ -14,6 +14,8 @@ import * as path from 'path';
 import { MailModule } from './mail/mail.module';
 import { CustomersModule } from './customers/customers.module';
 import { PurchaseModule } from './purchase/purchase.module';
+import { AccountModule } from './account/account.module';
+import { ExpenseModule } from './expense/expense.module';
 
 @Module({
   imports: [
@@ -44,8 +46,9 @@ import { PurchaseModule } from './purchase/purchase.module';
     ProductModule,
     TransactionModule,
     CustomersModule,
-    // AccountModule,
+    AccountModule,
     PurchaseModule,
+    ExpenseModule,
   ],
   providers: [AppService],
   controllers: [AppController],

@@ -8,8 +8,8 @@ import { Purchase, PurchaseSchema } from './schemas/purchase.schema';
 @Module({
   imports: [
     MongooseModule.forFeature([
-      {name: Purchase.name, schema: PurchaseSchema}
-    ])
+      { name: Purchase.name, schema: PurchaseSchema },
+    ]),
   ],
   controllers: [PurchaseController],
   providers: [PurchaseService],
