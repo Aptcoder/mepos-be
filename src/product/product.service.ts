@@ -35,7 +35,7 @@ export class ProductService {
   }
 
   findAll(storeId?: string, name?: string) {
-    let query = {};
+    const query = {};
     if (storeId) {
       query['store'] = storeId;
     }
@@ -49,16 +49,30 @@ export class ProductService {
       .populate(['category', 'store', 'unit']);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(storeId: string, id: string) {
+    const product = await this.productModel.findOne({
+      store: storeId,
+      _id: id,
+    });
+    if (!product) throw new BadRequestException("Product doesn't exist");
+    return product;
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(
+    storeId: string,
+    id: string,
+    updateProductDto: UpdateProductDto,
+  ) {
+    const product = await this.productModel.findOneAndUpdate(
+      { store: storeId, _id: id },
+      { ...updateProductDto },
+    );
+    if (!product) throw new BadRequestException("Product doesn't exist");
   }
 
-  remove(id: string) {
+  remove(storeId: string, id: string) {
     return this.productModel.deleteOne({
+      store: storeId,
       _id: id,
     });
   }

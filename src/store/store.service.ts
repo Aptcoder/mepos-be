@@ -18,6 +18,7 @@ export class StoreService {
     private readonly userService: UserService,
     private readonly roleService: RoleService,
   ) {}
+  
   async create(createStoreDto: CreateStoreDto) {
     const ownerRole = await this.roleService.getRole('owner', true);
     if (!ownerRole) {

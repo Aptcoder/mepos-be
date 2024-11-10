@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductController } from './product.controller';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -8,6 +8,7 @@ import { Category, CategorySchema } from './category/category.schema';
 import { UnitService } from './unit/unit.service';
 import { Unit, UnitSchema } from './unit/unit.schema';
 
+@Global()
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -18,5 +19,6 @@ import { Unit, UnitSchema } from './unit/unit.schema';
   ],
   controllers: [ProductController],
   providers: [ProductService, CategoryService, UnitService],
+  exports: [ProductService],
 })
 export class ProductModule {}

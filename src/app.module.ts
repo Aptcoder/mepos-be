@@ -11,6 +11,10 @@ import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { I18nModule, QueryResolver } from 'nestjs-i18n';
 import * as path from 'path';
+import { MailModule } from './mail/mail.module';
+import { CustomersModule } from './customers/customers.module';
+import { PurchaseModule } from './purchase/purchase.module';
+
 @Module({
   imports: [
     I18nModule.forRoot({
@@ -22,6 +26,7 @@ import * as path from 'path';
       viewEngine: 'hbs',
       resolvers: [{ use: QueryResolver, options: ['lang'] }],
     }),
+    MailModule,
     LoggerModule.forRoot({
       pinoHttp: {
         transport: {
@@ -38,8 +43,9 @@ import * as path from 'path';
     RoleModule,
     ProductModule,
     TransactionModule,
+    CustomersModule,
     // AccountModule,
-    // PurchaseModule,
+    PurchaseModule,
   ],
   providers: [AppService],
   controllers: [AppController],
