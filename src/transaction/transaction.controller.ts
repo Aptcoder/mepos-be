@@ -16,10 +16,14 @@ import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { HttpResponseHelper } from 'src/common/helper/http-response.helper';
 import { FindTransactionDto } from './dto/find-transaction.dto';
 import { Response } from 'express';
+import { TranslationService } from 'src/translation/translation.service';
 
 @Controller('/:storeId/transactions')
 export class TransactionController {
-  constructor(private readonly transactionService: TransactionService) {}
+  constructor(
+    private readonly transactionService: TransactionService,
+    private readonly translationService: TranslationService,
+  ) {}
 
   @Post()
   async create(
@@ -64,8 +68,19 @@ export class TransactionController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.transactionService.findOne(id);
+  async findOne(@Param('id') id: string, @Query('lang') lang?: string) {
+    const transaction = await this.transactionService.findOne(id);
+
+    if (lang) {
+      const dataTranslation =
+        await this.translationService.translateKeysAndValues(
+          transaction.toJSON(),
+          lang,
+        );
+
+      return HttpResponseHelper.send('Transaction', dataTranslation);
+    }
+    return HttpResponseHelper.send('Transaction', transaction);
   }
 
   @Put(':id')

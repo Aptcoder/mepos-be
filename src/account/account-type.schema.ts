@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
+import { Store } from 'src/store/store.schema';
 
 export type Document = HydratedDocument<AccountType>;
 
@@ -8,14 +9,18 @@ export class AccountType {
   @Prop()
   name: string;
 
-  @Prop()
-  accountNumber: string;
+  @Prop({
+    ref: 'AccountType',
+    type: mongoose.Schema.Types.ObjectId,
+  })
+  parentAccountType: AccountType;
 
-  @Prop({})
-  bankName: string;
-
-  @Prop({})
-  bankCode: string;
+  @Prop({
+    required: true,
+    ref: 'Store',
+    type: mongoose.Schema.Types.ObjectId,
+  })
+  store: Store;
 }
 
-export const AccountSchema = SchemaFactory.createForClass(AccountType);
+export const AccountTypeSchema = SchemaFactory.createForClass(AccountType);

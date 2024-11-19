@@ -49,7 +49,7 @@ export class ProductController {
     @Param('storeId') storeId: string,
     @Param('id') id: string,
   ) {
-    const category = await this.categoryService.findOne(storeId, id)
+    const category = await this.categoryService.findOne(storeId, id);
     return HttpResponseHelper.send('Category', category);
   }
 
@@ -66,9 +66,13 @@ export class ProductController {
   async updateCategory(
     @Param('storeId') storeId: string,
     @Param('id') id: string,
-    @Body() updateCategoryDto: UpdateCategoryDto
+    @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    const category = await this.categoryService.update(storeId, id, updateCategoryDto)
+    const category = await this.categoryService.update(
+      storeId,
+      id,
+      updateCategoryDto,
+    );
     return HttpResponseHelper.send('Category updated', category);
   }
 
@@ -88,10 +92,7 @@ export class ProductController {
   }
 
   @Get('/units/:id')
-  async fetchUnit(
-    @Param('storeId') storeId: string,
-    @Param('id') id: string,
-  ) {
+  async fetchUnit(@Param('storeId') storeId: string, @Param('id') id: string) {
     const unit = await this.unitService.findOne(storeId, id);
     return HttpResponseHelper.send('Unit fetched', unit);
   }
@@ -101,22 +102,19 @@ export class ProductController {
     const units = await this.unitService.findAll(storeId);
     return HttpResponseHelper.send('Units', units);
   }
-  
+
   @Patch('/units/:id')
   async updateUnit(
     @Param('storeId') storeId: string,
     @Param('id') id: string,
-    @Body() updateUnitDto: UpdateUnitDto
+    @Body() updateUnitDto: UpdateUnitDto,
   ) {
     const unit = await this.unitService.update(storeId, id, updateUnitDto);
     return HttpResponseHelper.send('Unit updated', unit);
   }
 
   @Delete('/units/:id')
-  async deleteUnit(
-    @Param('storeId') storeId: string,
-    @Param('id') id: string,
-  ) {
+  async deleteUnit(@Param('storeId') storeId: string, @Param('id') id: string) {
     await this.unitService.remove(storeId, id);
     return HttpResponseHelper.send('Unit deleted', {});
   }
@@ -159,10 +157,7 @@ export class ProductController {
   }
 
   @Get(':id')
-  async findOne(
-    @Param('storeId') storeId: string,
-    @Param('id') id: string
-  ) {
+  async findOne(@Param('storeId') storeId: string, @Param('id') id: string) {
     const product = await this.productService.findOne(storeId, id);
     return HttpResponseHelper.send('Product', product);
   }
@@ -171,18 +166,14 @@ export class ProductController {
   async update(
     @Param('storeId') storeId: string,
     @Param('id') id: string,
-    @Body() updateProductDto: UpdateProductDto
+    @Body() updateProductDto: UpdateProductDto,
   ) {
     await this.productService.update(storeId, id, updateProductDto);
     return HttpResponseHelper.send('Product updated', {});
-
   }
 
   @Delete(':id')
-  async remove(
-    @Param('storeId') storeId: string,
-    @Param('id') id: string
-  ) {
+  async remove(@Param('storeId') storeId: string, @Param('id') id: string) {
     await this.productService.remove(storeId, id);
     return HttpResponseHelper.send('Product deleted', {});
   }

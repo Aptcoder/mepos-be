@@ -10,11 +10,11 @@ import { StoreModule } from 'src/store/store.module';
   imports: [
     StoreModule,
     MongooseModule.forFeature([
-    {name: Customer.name, schema: CustomerSchema}
-    ])
-],
+      { name: Customer.name, schema: CustomerSchema },
+    ]),
+  ],
   controllers: [CustomersController],
   providers: [CustomersService],
-  exports: [CustomersService]
+  exports: [CustomersService],
 })
 export class CustomersModule {}

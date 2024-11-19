@@ -1,15 +1,10 @@
 import {
   BadRequestException,
   ConflictException,
-  NotFoundException,
   UnauthorizedException,
   Injectable,
-  HttpStatus,
-  Inject,
-  forwardRef,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcryptjs';
 import { User } from './user.schema';
@@ -23,7 +18,8 @@ import { MailService } from 'src/mail/mail.service';
 export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
-    private readonly mailService: MailService) {}
+    private readonly mailService: MailService,
+  ) {}
 
   async login(storeId: string, input: LoginUserDto) {
     const user = await this.userModel
@@ -85,7 +81,7 @@ export class UserService {
   }
 
   findAll(storeId?: string) {
-    let query = {};
+    const query = {};
     if (storeId) {
       query['store'] = storeId;
     }
@@ -93,16 +89,15 @@ export class UserService {
   }
 
   async findByEmail(email: string) {
-    return await this.userModel.findOne({email})
+    return await this.userModel.findOne({ email });
   }
 
   async forgotPassword(email: string, storeId: string) {
-    const user = await this.userModel
-    .findOne({
+    const user = await this.userModel.findOne({
       email: email.toLowerCase(),
       store: storeId,
     });
-    
+
     if (!user) throw new BadRequestException('Invalid credentials');
 
     await this.mailService.sendPasswordResetMail(user, storeId);
@@ -110,18 +105,20 @@ export class UserService {
   }
 
   async resetPassword(resetPassword: ResetPasswordDto, storeId: string) {
-    const {email, passwordToken, password} = resetPassword;    
+    const { email, passwordToken, password } = resetPassword;
 
-    const user = await this.userModel
-    .findOne({
+    const user = await this.userModel.findOne({
       email: email.toLowerCase(),
       store: storeId,
     });
-    
+
     if (!user) throw new BadRequestException('Invalid credentials');
 
     const currentDay = new Date();
-    if (user.passwordToken !== passwordToken && user.passwordTokenExpirationDate > currentDay) {
+    if (
+      user.passwordToken !== passwordToken &&
+      user.passwordTokenExpirationDate > currentDay
+    ) {
       throw new UnauthorizedException('Invalid Password Token');
     }
 
@@ -129,8 +126,8 @@ export class UserService {
     user.password = hashedPassword;
     user.passwordToken = '';
     user.passwordTokenExpirationDate = null;
-    await this.update(user.id, user)
-    
+    await this.update(user.id, user);
+
     return [];
   }
 
@@ -139,7 +136,10 @@ export class UserService {
   }
 
   async update(id: number, updateUserDto: any) {
-    await this.userModel.findByIdAndUpdate(id, updateUserDto, {new: true, runValidators: true})
+    await this.userModel.findByIdAndUpdate(id, updateUserDto, {
+      new: true,
+      runValidators: true,
+    });
   }
 
   remove(id: number) {

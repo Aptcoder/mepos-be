@@ -5,6 +5,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { GlobalExceptionsFilter } from './common/exceptions/http-filter.exception';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import { engine } from 'express-handlebars';
+import { TranslationService } from './translation/translation.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -12,6 +14,17 @@ async function bootstrap() {
     origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   });
+
+  // const i18n = app.get(TranslationService);
+
+  // app.engine(
+  //   'hbs',
+  //   engine({
+  //     helpers: {
+  //       t: (key: string) => i18n.translate(key),
+  //     },
+  //   }),
+  // );
 
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new GlobalExceptionsFilter());
