@@ -32,6 +32,7 @@
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "cloudinary": "^2.5.1",
     "config": "^3.3.11",
     "cross-env": "^7.0.3",
     "csvtojson": "^2.0.10",
@@ -45,7 +46,8 @@
     "pino-http": "^10.3.0",
     "pino-pretty": "^11.2.2",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "streamifier": "^0.1.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

@@ -26,6 +26,7 @@ import { Express } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express/multer/interceptors/file.interceptor';
 import { UpdateUnitDto } from './unit/dto/update-unit.dto';
 import { UpdateCategoryDto } from './category/dto/update-category.dto';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Controller('/:storeId/products')
 export class ProductController {
@@ -33,6 +34,7 @@ export class ProductController {
     private readonly categoryService: CategoryService,
     private readonly productService: ProductService,
     private readonly unitService: UnitService,
+    private readonly cloudinaryService: CloudinaryService
   ) {}
 
   @Post('/categories')
@@ -176,5 +178,18 @@ export class ProductController {
   async remove(@Param('storeId') storeId: string, @Param('id') id: string) {
     await this.productService.remove(storeId, id);
     return HttpResponseHelper.send('Product deleted', {});
+  }
+
+  @Patch(':id/upload-product-image')
+  @UseInterceptors(FileInterceptor('image'))
+  async uploadProductImage(
+    @Param('storeId') storeId: string,
+    @Param('id') id: string,
+    @UploadedFile()
+      image: Express.Multer.File,
+  ) {
+    const productImage = await this.cloudinaryService.uploadFile(image);
+    const product = await this.productService.update(storeId, id, {productImage: productImage.secure_url});
+    return HttpResponseHelper.send('Product image uploaded', product);
   }
 }

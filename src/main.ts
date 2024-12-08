@@ -10,7 +10,10 @@ import { TranslationService } from './translation/translation.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.enableCors();
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  });
 
   // const i18n = app.get(TranslationService);
 

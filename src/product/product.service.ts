@@ -68,6 +68,7 @@ export class ProductService {
       { ...updateProductDto },
     );
     if (!product) throw new BadRequestException("Product doesn't exist");
+    return product;
   }
 
   remove(storeId: string, id: string) {
@@ -76,4 +77,6 @@ export class ProductService {
       _id: id,
     });
   }
+
+
 }

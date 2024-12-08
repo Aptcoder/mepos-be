@@ -65,6 +65,9 @@ export class Product {
   sellingPrice: string;
 
   @Prop()
+  productImage: string;
+
+  @Prop()
   includeTax: string;
 
   @Prop({
