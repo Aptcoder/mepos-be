@@ -26,6 +26,8 @@ import { Express } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express/multer/interceptors/file.interceptor';
 import { UpdateUnitDto } from './unit/dto/update-unit.dto';
 import { UpdateCategoryDto } from './category/dto/update-category.dto';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+
 
 @Controller('/:storeId/products')
 export class ProductController {
@@ -33,6 +35,7 @@ export class ProductController {
     private readonly categoryService: CategoryService,
     private readonly productService: ProductService,
     private readonly unitService: UnitService,
+    private readonly cloudinaryService: CloudinaryService
   ) {}
 
   @Post('/categories')
@@ -154,6 +157,12 @@ export class ProductController {
   ) {
     const products = await this.productService.findAll(storeId, name);
     return HttpResponseHelper.send('Products', products);
+  }
+
+  @Get('presigned-url')
+  async getPresignedURL(@Param('storeId') storeId: string) {
+    const presignedURL = await this.cloudinaryService.getpresignedCloudinaryURL();    
+    return HttpResponseHelper.send('Presigned URL', presignedURL);
   }
 
   @Get(':id')

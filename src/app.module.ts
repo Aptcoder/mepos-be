@@ -16,6 +16,7 @@ import { CustomersModule } from './customers/customers.module';
 import { PurchaseModule } from './purchase/purchase.module';
 import { AccountModule } from './account/account.module';
 import { ExpenseModule } from './expense/expense.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { ExpenseModule } from './expense/expense.module';
     AccountModule,
     PurchaseModule,
     ExpenseModule,
+    CloudinaryModule
   ],
   providers: [AppService],
   controllers: [AppController],
