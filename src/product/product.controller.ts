@@ -28,6 +28,7 @@ import { UpdateUnitDto } from './unit/dto/update-unit.dto';
 import { UpdateCategoryDto } from './category/dto/update-category.dto';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
+
 @Controller('/:storeId/products')
 export class ProductController {
   constructor(
@@ -158,6 +159,12 @@ export class ProductController {
     return HttpResponseHelper.send('Products', products);
   }
 
+  @Get('presigned-url')
+  async getPresignedURL(@Param('storeId') storeId: string) {
+    const presignedURL = await this.cloudinaryService.getpresignedCloudinaryURL();    
+    return HttpResponseHelper.send('Presigned URL', presignedURL);
+  }
+
   @Get(':id')
   async findOne(@Param('storeId') storeId: string, @Param('id') id: string) {
     const product = await this.productService.findOne(storeId, id);
@@ -178,18 +185,5 @@ export class ProductController {
   async remove(@Param('storeId') storeId: string, @Param('id') id: string) {
     await this.productService.remove(storeId, id);
     return HttpResponseHelper.send('Product deleted', {});
-  }
-
-  @Patch(':id/upload-product-image')
-  @UseInterceptors(FileInterceptor('image'))
-  async uploadProductImage(
-    @Param('storeId') storeId: string,
-    @Param('id') id: string,
-    @UploadedFile()
-      image: Express.Multer.File,
-  ) {
-    const productImage = await this.cloudinaryService.uploadFile(image);
-    const product = await this.productService.update(storeId, id, {productImage: productImage.secure_url});
-    return HttpResponseHelper.send('Product image uploaded', product);
   }
 }

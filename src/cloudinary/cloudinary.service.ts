@@ -1,20 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { v2 as cloudinary } from 'cloudinary';
-import { CloudinaryResponse } from './cloudinary-response';
-const streamifier = require('streamifier');
 
 @Injectable()
 export class CloudinaryService {
-  async uploadFile(file: Express.Multer.File): Promise<CloudinaryResponse> {
-    return new Promise<CloudinaryResponse>((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        (error, result) => {
-          if (error) return reject(error);
-          resolve(result);
-        },
-      );
-
-      streamifier.createReadStream(file.buffer).pipe(uploadStream);
-    });
-  }
+  async getpresignedCloudinaryURL(): Promise<String> {
+    const timestamp = new Date().getTime();
+    const signature = cloudinary.utils.api_sign_request(
+      {
+        timestamp: timestamp,
+      },
+      process.env.CLOUDINARY_API_SECRET,
+    );
+    return `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_NAME}/image/upload?api_key=${process.env.CLOUDINARY_API_KEY}&timestamp=${timestamp}&signature=${signature}`
+  }  
 }
